@@ -1,13 +1,15 @@
-package cfp.wecare.service;
+package cfp.wecare.flow.ui.consume.prgm.service;
 
-import cfp.wecare.Repository.PrgmRepository;
 import cfp.wecare.dto.PrgmDto;
+import cfp.wecare.flow.ui.consume.prgm.repository.PrgmRepository;
 import cfp.wecare.model.Prgm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class PrgmServiceImpl implements PrgmService {
 
     @Autowired

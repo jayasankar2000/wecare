@@ -1,7 +1,7 @@
-package cfp.wecare.controller;
+package cfp.wecare.flow.ui.consume.org.controller;
 
 import cfp.wecare.dto.OrgDto;
-import cfp.wecare.service.OrgService;
+import cfp.wecare.flow.ui.consume.org.service.OrgService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

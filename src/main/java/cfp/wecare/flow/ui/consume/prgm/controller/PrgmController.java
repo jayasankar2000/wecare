@@ -1,7 +1,7 @@
-package cfp.wecare.controller;
+package cfp.wecare.flow.ui.consume.prgm.controller;
 
 import cfp.wecare.dto.PrgmDto;
-import cfp.wecare.service.PrgmService;
+import cfp.wecare.flow.ui.consume.prgm.service.PrgmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,7 +15,7 @@ public class PrgmController {
     private PrgmService prgmService;
 
     @GetMapping(value = "/allPrgms")
-    public List<PrgmDto> getAllPrgms(){
+    public List<PrgmDto> getAllPrgms() {
         return prgmService.getPrgms();
     }
 }

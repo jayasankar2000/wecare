@@ -1,4 +1,4 @@
-package cfp.wecare.service;
+package cfp.wecare.flow.ui.consume.org.service;
 
 import cfp.wecare.dto.OrgDto;
 

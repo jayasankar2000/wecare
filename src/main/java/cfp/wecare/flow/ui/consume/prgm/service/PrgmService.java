@@ -1,4 +1,4 @@
-package cfp.wecare.service;
+package cfp.wecare.flow.ui.consume.prgm.service;
 
 import cfp.wecare.dto.PrgmDto;
 
