@@ -3,8 +3,11 @@ package cfp.wecare.flow.ui.consume.item.controller;
 import cfp.wecare.dto.ItemDto;
 import cfp.wecare.flow.ui.consume.item.exception.ItemException;
 import cfp.wecare.flow.ui.consume.item.service.ItemService;
+import cfp.wecare.util.ExceptionResponseObject;
+import jdk.jfr.ContentType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
@@ -27,16 +30,23 @@ public class ItemController {
     public int saveItems(@RequestParam MultipartFile file) {
         try {
             return itemService.saveItems(file);
-        } catch (ItemException e) {
-            throw e;
         } catch (Exception ex) {
+            if (ex instanceof ItemException itemException){
+                throw itemException;
+            }
             throw new ItemException(HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
-    @ExceptionHandler
-    public ResponseEntity exceptionHandler(ItemException ex, WebRequest request) {
-        return ResponseEntity.status(ex.getHttpStatus()).build();
+    @ExceptionHandler(value = ItemException.class)
+    @ResponseBody
+    public ResponseEntity<ExceptionResponseObject> exceptionHandler(ItemException ex, WebRequest request) {
+        ExceptionResponseObject object = ExceptionResponseObject.builder()
+                .message(ex.getMessage())
+                .httpStatus(ex.getHttpStatus())
+                .httpStatusCode(ex.getHttpStatus().value())
+                .build();
+        return new ResponseEntity<ExceptionResponseObject>(object, ex.getHttpStatus());
     }
 
 }

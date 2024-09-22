@@ -7,20 +7,24 @@ import org.springframework.http.HttpStatus;
 public class ItemException extends RuntimeException {
 
     private HttpStatus httpStatus;
-    private String msg;
+    private Object error;
 
     public ItemException() {
     }
 
     public ItemException(HttpStatus httpStatus, String msg) {
         super(msg);
+        this.httpStatus = httpStatus;
     }
 
-    public ItemException(HttpStatus httpStatus, Throwable ex) {
+    public ItemException(HttpStatus httpStatus, Exception ex) {
         super(ex);
+        this.httpStatus = httpStatus;
+        this.error = ex;
     }
 
-    public ItemException(String msg, Throwable ex) {
+    public ItemException(String msg, Exception ex) {
         super(ex);
+        this.error = ex;
     }
 }
