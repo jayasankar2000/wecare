@@ -4,10 +4,8 @@ import cfp.wecare.dto.ItemDto;
 import cfp.wecare.flow.ui.consume.item.exception.ItemException;
 import cfp.wecare.flow.ui.consume.item.service.ItemService;
 import cfp.wecare.util.ExceptionResponseObject;
-import jdk.jfr.ContentType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
@@ -27,11 +25,11 @@ public class ItemController {
     }
 
     @PostMapping(value = "/saveItems")
-    public int saveItems(@RequestParam MultipartFile file) {
+    public int saveItems(@RequestParam MultipartFile file, @RequestParam String orgId) {
         try {
-            return itemService.saveItems(file);
+            return itemService.saveItems(file, orgId);
         } catch (Exception ex) {
-            if (ex instanceof ItemException itemException){
+            if (ex instanceof ItemException itemException) {
                 throw itemException;
             }
             throw new ItemException(HttpStatus.INTERNAL_SERVER_ERROR, ex);
