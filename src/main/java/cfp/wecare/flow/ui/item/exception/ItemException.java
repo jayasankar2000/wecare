@@ -1,4 +1,4 @@
-package cfp.wecare.flow.ui.consume.item.exception;
+package cfp.wecare.flow.ui.item.exception;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

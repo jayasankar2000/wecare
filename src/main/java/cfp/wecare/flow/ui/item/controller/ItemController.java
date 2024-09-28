@@ -1,8 +1,8 @@
-package cfp.wecare.flow.ui.consume.item.controller;
+package cfp.wecare.flow.ui.item.controller;
 
 import cfp.wecare.dto.ItemDto;
-import cfp.wecare.flow.ui.consume.item.exception.ItemException;
-import cfp.wecare.flow.ui.consume.item.service.ItemService;
+import cfp.wecare.flow.ui.item.exception.ItemException;
+import cfp.wecare.flow.ui.item.service.ItemService;
 import cfp.wecare.util.ExceptionResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

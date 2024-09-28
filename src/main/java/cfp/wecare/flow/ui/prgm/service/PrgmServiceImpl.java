@@ -1,9 +1,11 @@
-package cfp.wecare.flow.ui.consume.prgm.service;
+package cfp.wecare.flow.ui.prgm.service;
 
 import cfp.wecare.dto.PrgmDto;
-import cfp.wecare.flow.ui.consume.prgm.repository.PrgmRepository;
+import cfp.wecare.flow.ui.prgm.Exception.PrgmException;
+import cfp.wecare.flow.ui.prgm.repository.PrgmRepository;
 import cfp.wecare.model.Prgm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +23,15 @@ public class PrgmServiceImpl implements PrgmService {
         return prgms.stream()
                 .map(this::mapper)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public PrgmDto getPrgm(String prgmId) {
+        Prgm prgm = prgmRepository.findById(prgmId).orElse(null);
+        if (prgm != null) {
+            return mapper(prgm);
+        }
+        throw new PrgmException(HttpStatus.NOT_FOUND, "Program not found");
     }
 
     private PrgmDto mapper(Prgm prgm) {

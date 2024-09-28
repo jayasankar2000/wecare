@@ -1,4 +1,4 @@
-package cfp.wecare.flow.ui.consume.item.service;
+package cfp.wecare.flow.ui.item.service;
 
 import cfp.wecare.dto.ItemDto;
 import org.springframework.web.multipart.MultipartFile;

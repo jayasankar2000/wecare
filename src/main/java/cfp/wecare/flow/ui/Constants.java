@@ -1,4 +1,4 @@
-package cfp.wecare.flow.ui.consume;
+package cfp.wecare.flow.ui;
 
 public class Constants {
 

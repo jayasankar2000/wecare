@@ -1,4 +1,4 @@
-package cfp.wecare.flow.ui.consume.prgm.repository;
+package cfp.wecare.flow.ui.prgm.repository;
 
 import cfp.wecare.model.Prgm;
 import org.springframework.data.repository.CrudRepository;

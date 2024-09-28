@@ -1,7 +1,7 @@
-package cfp.wecare.flow.ui.consume.org.service;
+package cfp.wecare.flow.ui.org.service;
 
 import cfp.wecare.dto.OrgDto;
-import cfp.wecare.flow.ui.consume.org.repository.OrgRepository;
+import cfp.wecare.flow.ui.org.repository.OrgRepository;
 import cfp.wecare.model.Org;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
