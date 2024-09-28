@@ -3,6 +3,7 @@ package cfp.wecare.flow.ui.org.service;
 import cfp.wecare.dto.OrgDto;
 import cfp.wecare.flow.ui.org.repository.OrgRepository;
 import cfp.wecare.model.Org;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,22 +14,18 @@ import java.util.stream.Collectors;
 public class OrgServiceImpl implements OrgService {
     @Autowired
     private OrgRepository orgRepository;
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Override
     public List<OrgDto> getAllOrgs() {
         List<Org> orgs = (List<Org>) orgRepository.findAll();
         return orgs.stream()
-                .map(this::mapper)
+                .map(this::mapperToDto)
                 .collect(Collectors.toList());
     }
 
-    public OrgDto mapper(Org org) {
-        return OrgDto.builder()
-                .orgId(org.getOrgId())
-                .orgName(org.getOrgName())
-                .orgAdmin(org.getOrgAdmin())
-                .address(org.getAddress())
-                .description(org.getDescription())
-                .build();
+    public OrgDto mapperToDto(Org org) {
+        return modelMapper.map(org, OrgDto.class);
     }
 }

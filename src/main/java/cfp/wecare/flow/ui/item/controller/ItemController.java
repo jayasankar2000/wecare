@@ -37,7 +37,6 @@ public class ItemController {
     }
 
     @ExceptionHandler(value = ItemException.class)
-    @ResponseBody
     public ResponseEntity<ExceptionResponseObject> exceptionHandler(ItemException ex, WebRequest request) {
         ExceptionResponseObject object = ExceptionResponseObject.builder()
                 .message(ex.getMessage())

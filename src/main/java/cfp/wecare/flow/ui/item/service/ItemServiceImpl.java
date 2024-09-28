@@ -13,6 +13,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,9 @@ public class ItemServiceImpl implements ItemService {
     @Autowired
     private ExcelUtil excelUtil;
     @Autowired
-    OrgItemRepository orgItemRepository;
+    private OrgItemRepository orgItemRepository;
+    @Autowired
+    private ModelMapper modelMapper;
 
     Logger logger = LoggerFactory.getLogger(ItemServiceImpl.class);
 
@@ -48,7 +51,7 @@ public class ItemServiceImpl implements ItemService {
     public List<ItemDto> getItems() {
         List<Item> items = (List<Item>) itemRepository.findAll();
         return items.stream()
-                .map(this::mapper)
+                .map(this::mapperToDto)
                 .collect(Collectors.toList());
     }
 
@@ -120,12 +123,7 @@ public class ItemServiceImpl implements ItemService {
         return items;
     }
 
-    private ItemDto mapper(Item item) {
-        return ItemDto.builder()
-                .itemId(item.getItemId())
-                .itemName(item.getItemName())
-                .itemPrice(item.getItemPrice())
-                .quantity(item.getQuantity())
-                .build();
+    private ItemDto mapperToDto(Item item) {
+        return modelMapper.map(item, ItemDto.class);
     }
 }
