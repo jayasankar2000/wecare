@@ -1,0 +1,43 @@
+CREATE TABLE IF NOT EXISTS public.t_item
+(
+    item_id character varying(255),
+    item_name character varying(50),
+    item_price integer,
+    quantity integer
+)
+
+
+
+CREATE TABLE T_USER(
+	user_id VARCHAR(255),
+	user_name VARCHAR(100),
+	user_type VARCHAR(20)
+);
+
+CREATE TABLE IF NOT EXISTS public.t_org
+(
+    org_id character varying(255),
+    org_name character varying(100),
+    address character varying(255),
+    descr text,
+    org_adm character varying(255)
+)
+
+CREATE TABLE T_PRGM(
+	pgm_id VARCHAR(255),
+	pgm_name VARCHAR(150),
+	st_date DATE,
+	ed_date DATE
+);
+
+CREATE TABLE T_ORG_ITEM(
+	org_item_id VARCHAR(255),
+	org_id VARCHAR(255),
+	item_id VARCHAR(255)
+);
+
+CREATE TABLE T_PRGM_ORG(
+	prgm_org_id VARCHAR(255),
+	prgm_id VARCHAR(255),
+	org_id VARCHAR(255)
+);

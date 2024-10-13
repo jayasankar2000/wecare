@@ -1,0 +1,50 @@
+									
+									
+									USER
+
+	- SUPER ADMIN-
+	
+		1.Have absolute authority
+		2.Can add/delete other super admins
+		3.Can add/delete other admins
+		4.can do everything what other users can
+		
+	- PROG ADMIN-
+
+		1.Can add/delete Programs
+		2.Can add/delete Org Admins
+		3.Can do what patrons do
+		
+	-ORG ADMIN-
+		
+		1.Can add/delete organizations in the programs
+		2.can add/delete items needed fot each organizations
+		3.Can do what patrons can
+		
+	- PATRONS -
+		
+		1. Can select multiple items for an organization 
+		2. can pay for the selected items
+		
+		
+	
+									Programs
+		
+
+		1. Represent various crowd funding programs 
+		2. A program should have a prog-admin
+		3. A program can have multiple organizations under it
+		
+									
+									Organizations
+									
+		1. Organizations should have an admin
+		2. Can have items needed for each 
+		3. patrons select item required for an org and pay the corresponding money 
+		
+		
+									Itens
+									
+		1. They are the requirements for each organization
+		2. Each Item can have multiple quantities
+		3. Each Item will have a price which can be sponsored by the patrons
