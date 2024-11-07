@@ -30,11 +30,38 @@ public class PrgmServiceImpl implements PrgmService {
 
     @Override
     public PrgmDto getPrgm(String prgmId) {
-        Prgm prgm = prgmRepository.findById(prgmId).orElse(null);
-        if (prgm != null) {
+        Prgm prgm = prgmRepository.findById(prgmId).orElseThrow(() -> new PrgmException(HttpStatus.NOT_FOUND, "Program not found"));
+        return mapperToDto(prgm);
+    }
+
+    @Override
+    public PrgmDto savePrgm(PrgmDto prgmDto) {
+        try {
+            Prgm prgm = prgmRepository.save(modelMapper.map(prgmDto, Prgm.class));
             return mapperToDto(prgm);
+        } catch (Exception e) {
+            throw new PrgmException(HttpStatus.INTERNAL_SERVER_ERROR, "Could not create a program " + e.getMessage());
         }
-        throw new PrgmException(HttpStatus.NOT_FOUND, "Program not found");
+    }
+
+    @Override
+    public PrgmDto updateProgram(String prgmId, PrgmDto prgmDto) {
+        try {
+            Prgm prgm = modelMapper.map(prgmDto, Prgm.class);
+            prgm.setPgmId(prgmId);
+            return mapperToDto(prgmRepository.save(prgm));
+        } catch (Exception e) {
+            throw new PrgmException(HttpStatus.INTERNAL_SERVER_ERROR, "Could not update program " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void deleteProgram(String prgmId) {
+        try {
+            prgmRepository.deleteById(prgmId);
+        } catch (Exception e) {
+            throw new PrgmException(HttpStatus.INTERNAL_SERVER_ERROR, "Could not delete program " + e.getMessage());
+        }
     }
 
     private PrgmDto mapperToDto(Prgm prgm) {

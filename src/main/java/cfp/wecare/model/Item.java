@@ -1,8 +1,6 @@
 package cfp.wecare.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,4 +17,7 @@ public class Item {
     private String itemName;
     private Integer itemPrice;
     private Integer quantity;
+    @ManyToOne
+    @JoinColumn(name = "Org_Id", nullable = false)
+    private Org org;
 }

@@ -7,29 +7,22 @@ import cfp.wecare.util.ExceptionResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/api")
 public class PrgmController {
 
     @Autowired
     private PrgmService prgmService;
 
     @GetMapping(value = "/getPrgms")
-    public List<PrgmDto> getAllPrgms() {
-        return prgmService.getPrgms();
-    }
-
-    @GetMapping(value = "getPrgm")
-    public PrgmDto getProgram(@PathVariable String prgmId) {
+    public ResponseEntity<List<PrgmDto>> getAllPrgms() {
         try {
-            return prgmService.getPrgm(prgmId);
+            return ResponseEntity.ok(prgmService.getPrgms()) ;
         } catch (Exception ex) {
             if (ex instanceof PrgmException pe) {
                 throw pe;
@@ -38,7 +31,45 @@ public class PrgmController {
         }
     }
 
-    @ExceptionHandler(PrgmException.class)
+    @GetMapping(value = "/getPrgm/{prgmId}")
+    public ResponseEntity<PrgmDto> getProgram(@PathVariable String prgmId) {
+        try {
+            return ResponseEntity.ok(prgmService.getPrgm(prgmId));
+        } catch (Exception ex) {
+            if (ex instanceof PrgmException pe) {
+                throw pe;
+            }
+            throw new PrgmException(HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
+    @PostMapping(value = "/super/create")
+    public ResponseEntity<PrgmDto> createProgram(@RequestBody PrgmDto prgmDto) {
+        try {
+            return ResponseEntity.ok( prgmService.savePrgm(prgmDto));
+        } catch (Exception e) {
+            if (e instanceof PrgmException ex) {
+                throw ex;
+            } else {
+                throw new PrgmException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            }
+        }
+    }
+
+    @PutMapping(value = "/super/update/{prgmId}")
+    public ResponseEntity<PrgmDto> updateProgram(@PathVariable String prgmId,@RequestParam PrgmDto prgmDto) {
+        try {
+            return ResponseEntity.ok(prgmService.updateProgram(prgmId, prgmDto));
+        } catch (Exception e) {
+            if (e instanceof PrgmException ex) {
+                throw ex;
+            } else {
+                throw new PrgmException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            }
+        }
+    }
+
+    @ExceptionHandler(value = PrgmException.class)
     public ResponseEntity<ExceptionResponseObject> exceptionHandler(PrgmException ex, WebRequest request) {
         ExceptionResponseObject object = ExceptionResponseObject.builder().
                 httpStatus(ex.getHttpStatus())
