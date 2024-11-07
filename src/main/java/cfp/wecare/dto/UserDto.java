@@ -1,19 +1,16 @@
-package cfp.wecare.model;
+package cfp.wecare.dto;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
 @Data
-@Table(name = "t_user")
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
-    @Id
+@Builder
+public class UserDto {
     private String userId;
     private String userName;
-    @Enumerated(EnumType.STRING)
-    private Role role;
+    private String userType;
 }

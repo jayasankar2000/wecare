@@ -1,23 +1,17 @@
-package cfp.wecare.model;
+package cfp.wecare.dto;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Table(name = "t_item")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Item {
-
-    @Id
+@Builder
+public class ItemDto {
     private String itemId;
     private String itemName;
     private Integer itemPrice;
     private Integer quantity;
-    @ManyToOne
-    @JoinColumn(name = "Org_Id", nullable = false)
-    private Org org;
 }
