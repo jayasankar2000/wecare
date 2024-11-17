@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import javax.sound.midi.Soundbank;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,6 +37,7 @@ public class PrgmServiceImpl implements PrgmService {
 
     @Override
     public PrgmDto savePrgm(PrgmDto prgmDto) {
+        System.out.println("in save Prgm");
         try {
             Prgm prgm = prgmRepository.save(modelMapper.map(prgmDto, Prgm.class));
             return mapperToDto(prgm);

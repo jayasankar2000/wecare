@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -18,8 +19,8 @@ public class Prgm {
     @Id
     private String pgmId;
     private String pgmName;
-    private Date stDate;
-    private Date edDate;
+    private LocalDate stDate;
+    private LocalDate edDate;
     @OneToMany(mappedBy = "program", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Org> orgs;
 }

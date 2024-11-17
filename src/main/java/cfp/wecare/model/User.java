@@ -14,6 +14,6 @@ public class User {
     @Id
     private String userId;
     private String userName;
-    @Enumerated(EnumType.STRING)
-    private Role role;
+    private String password;
+    private String role;
 }

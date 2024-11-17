@@ -24,7 +24,7 @@ public class ItemController {
         return itemService.getItems();
     }
 
-    @PostMapping(value = "/orgAdmin/saveItems")
+    @PostMapping(value = "admin/item/addItems")
     public int saveItems(@RequestParam MultipartFile file, @RequestParam String orgId) {
         try {
             return itemService.saveItems(file, orgId);
