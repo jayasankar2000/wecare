@@ -7,7 +7,6 @@ import cfp.wecare.model.Role;
 import cfp.wecare.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -18,14 +17,13 @@ import java.util.UUID;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+
 
     public void registerUser(UserDto userDto) {
         User user = User.builder()
                 .userId(UUID.randomUUID().toString())
                 .userName(userDto.getUserName())
-                .password(passwordEncoder.encode(userDto.getPassword()))
+//                .password(passwordEncoder.encode(userDto.getPassword()))
                 .role(Role.SIMPLE_USER.getRole())
                 .build();
         userRepository.save(user);

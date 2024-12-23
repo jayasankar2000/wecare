@@ -12,22 +12,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RequestMapping(value = "/api")
-public class RegisterController {
+public class AdminController {
 
     @Autowired
     UserService userService;
-
-    @PostMapping(value = "user/register")
-    public ResponseEntity<String> registerUser(@RequestParam UserDto userDto) {
-        try {
-            userService.registerUser(userDto);
-            return ResponseEntity.ok("User Registered Successfully");
-        } catch (UserException ex) {
-            throw ex;
-        } catch (Exception e) {
-            throw new UserException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while registering!! Please try again");
-        }
-    }
 
     @GetMapping(value = "/admin/getUsers")
     public ResponseEntity<List<UserDto>> getUsers() {
