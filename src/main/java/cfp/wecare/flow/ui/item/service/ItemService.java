@@ -11,4 +11,10 @@ public interface ItemService {
     List<ItemDto> getItems();
 
     int saveItems(MultipartFile multipartFile, String orgId) throws IOException;
+
+    List<ItemDto> getOrgItem(String orgId);
+
+    void deleteItem(String itemId);
+
+    ItemDto update(String itemId, ItemDto itemDto);
 }

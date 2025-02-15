@@ -7,6 +7,7 @@ import cfp.wecare.util.ExceptionResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -31,6 +32,9 @@ public class PrgmController {
     @PostMapping(value = "/super/createPrgm")
     public ResponseEntity<PrgmDto> createProgram(@RequestBody PrgmDto prgmDto) {
         try {
+            if (prgmDto == null || !StringUtils.hasText(prgmDto.getPgmName()) || prgmDto.getStDate() == null || prgmDto.getEdDate() == null) {
+                throw new PrgmException(HttpStatus.BAD_REQUEST, "Program name, start date and end date is mandatory");
+            }
             return ResponseEntity.ok(prgmService.savePrgm(prgmDto));
         } catch (Exception e) {
             if (e instanceof PrgmException ex) {
@@ -42,8 +46,11 @@ public class PrgmController {
     }
 
     @PutMapping(value = "/super/updatePrgm/{prgmId}")
-    public ResponseEntity<PrgmDto> updateProgram(@PathVariable String prgmId, @RequestParam PrgmDto prgmDto) {
+    public ResponseEntity<PrgmDto> updateProgram(@PathVariable String prgmId, @RequestBody PrgmDto prgmDto) {
         try {
+            if (prgmDto == null || !StringUtils.hasText(prgmDto.getPgmName()) || prgmDto.getStDate() == null || prgmDto.getEdDate() == null) {
+                throw new PrgmException(HttpStatus.BAD_REQUEST, "Program details are mandatory!!");
+            }
             return ResponseEntity.ok(prgmService.updateProgram(prgmId, prgmDto));
         } catch (Exception e) {
             if (e instanceof PrgmException ex) {

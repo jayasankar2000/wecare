@@ -12,7 +12,7 @@ public interface OrgService {
 
     OrgDto create(OrgDto orgDto);
 
-    OrgDto update(OrgDto orgDto);
+    OrgDto update(String orgId, OrgDto orgDto);
 
     void deleteOrg(String orgId);
 }

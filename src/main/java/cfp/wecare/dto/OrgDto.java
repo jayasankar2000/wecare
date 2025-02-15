@@ -2,16 +2,16 @@ package cfp.wecare.dto;
 
 import cfp.wecare.model.Item;
 import cfp.wecare.model.Prgm;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -21,6 +21,8 @@ public class OrgDto {
     private String address;
     private String description;
     private String orgAdmin;
-    private List<Item> items;
-    private Prgm program;
+    @JsonManagedReference
+    private List<ItemDto> items;
+    @JsonBackReference
+    private PrgmDto prgmDto;
 }

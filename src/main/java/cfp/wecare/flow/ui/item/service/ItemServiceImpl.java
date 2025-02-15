@@ -4,7 +4,9 @@ import cfp.wecare.Repository.OrgItemRepository;
 import cfp.wecare.dto.ItemDto;
 import cfp.wecare.flow.ui.item.exception.ItemException;
 import cfp.wecare.flow.ui.item.repository.ItemRepository;
+import cfp.wecare.flow.ui.org.repository.OrgRepository;
 import cfp.wecare.model.Item;
+import cfp.wecare.model.Org;
 import cfp.wecare.model.OrgItem;
 import cfp.wecare.util.Constants;
 import cfp.wecare.util.ExcelUtil;
@@ -24,10 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static cfp.wecare.flow.ui.Constants.FAILED_TO_PARSE_EXCEL;
@@ -44,15 +43,22 @@ public class ItemServiceImpl implements ItemService {
     private OrgItemRepository orgItemRepository;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private OrgRepository orgRepository;
 
     Logger logger = LoggerFactory.getLogger(ItemServiceImpl.class);
 
     @Override
     public List<ItemDto> getItems() {
-        List<Item> items = (List<Item>) itemRepository.findAll();
-        return items.stream()
-                .map(this::mapperToDto)
-                .collect(Collectors.toList());
+        try {
+            List<Item> items = (List<Item>) itemRepository.findAll();
+            return items.stream()
+                    .filter(Objects::nonNull)
+                    .map(this::mapperToDto)
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new ItemException(HttpStatus.INTERNAL_SERVER_ERROR, "Fetching all Items failed with Internal error");
+        }
     }
 
     @Override
@@ -77,11 +83,63 @@ public class ItemServiceImpl implements ItemService {
                     }).collect(Collectors.toList());
             List<Item> savedItems = (List<Item>) itemRepository.saveAll(itemsToSave);
             orgItemRepository.saveAll(orgItems);
-            logger.info("Saved Items :"  + savedItems);
+            logger.info("Saved Items :" + savedItems);
             return savedItems.size();
         } else {
             logger.warn(NOT_AN_EXCEL);
             throw new ItemException(HttpStatus.BAD_REQUEST, NOT_AN_EXCEL);
+        }
+    }
+
+    @Override
+    public List<ItemDto> getOrgItem(String orgId) {
+        try {
+            Optional<Org> org = orgRepository.findById(orgId);
+            if (org.isEmpty()) {
+                throw new ItemException(HttpStatus.NOT_FOUND, "The Organization is not present");
+            }
+            List<Item> items = itemRepository.findByOrg(org.get());
+            return items.stream()
+                    .filter(Objects::nonNull)
+                    .map(this::mapperToDto)
+                    .collect(Collectors.toList());
+        } catch (ItemException e) {
+            throw e;
+        } catch (Exception ex) {
+            throw new ItemException(HttpStatus.INTERNAL_SERVER_ERROR, "Fetching Items for the Organization failed with Internal error");
+        }
+    }
+
+    @Override
+    public void deleteItem(String itemId) {
+        try {
+            if (itemRepository.findById(itemId).isEmpty()) {
+                throw new ItemException(HttpStatus.NOT_FOUND, "The Item does not exist");
+            }
+            itemRepository.deleteById(itemId);
+        } catch (ItemException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new ItemException(HttpStatus.INTERNAL_SERVER_ERROR, "Deleting the item failed with Internal error");
+        }
+    }
+
+    @Override
+    public ItemDto update(String itemId, ItemDto itemDto) {
+        try {
+            Optional<Item> item = itemRepository.findById(itemId);
+            if (item.isEmpty()) {
+                throw new ItemException(HttpStatus.NOT_FOUND, "Could not find the Item");
+            }
+            Item newItem = item.get();
+            newItem.setItemName(itemDto.getItemName());
+            newItem.setItemPrice(itemDto.getItemPrice());
+            newItem.setQuantity(itemDto.getQuantity());
+            return mapperToDto(itemRepository.save(newItem));
+        } catch (ItemException ex) {
+            throw ex;
+        } catch (Exception e) {
+            throw new ItemException(HttpStatus.INTERNAL_SERVER_ERROR, "Could not update Item, failed with Internal error");
         }
     }
 

@@ -4,6 +4,7 @@ import cfp.wecare.dto.ItemDto;
 import cfp.wecare.flow.ui.item.exception.ItemException;
 import cfp.wecare.flow.ui.item.service.ItemService;
 import cfp.wecare.util.ExceptionResponseObject;
+import org.apache.xmlbeans.impl.xb.xsdschema.BlockSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +20,28 @@ public class ItemController {
     @Autowired
     ItemService itemService;
 
-    @GetMapping(value = "/getAllItems")
-    public List<ItemDto> getItems() {
-        return itemService.getItems();
+    @GetMapping(value = "/items")
+    public ResponseEntity<List<ItemDto>> getAllItems() {
+        try {
+            return ResponseEntity.ok(itemService.getItems());
+        } catch (Exception e) {
+            if (e instanceof ItemException ex) {
+                throw ex;
+            }
+            throw new ItemException(HttpStatus.INTERNAL_SERVER_ERROR, "Fetching All items failed with Internal error");
+        }
+    }
+
+    @GetMapping(value = "/{orgId}/items")
+    public ResponseEntity<List<ItemDto>> getOrgItems(@PathVariable String orgId) {
+        try {
+            return ResponseEntity.ok(itemService.getOrgItem(orgId));
+        } catch (Exception e) {
+            if (e instanceof ItemException ex) {
+                throw ex;
+            }
+            throw new ItemException(HttpStatus.INTERNAL_SERVER_ERROR, "Fetching items for the Organization failed with Internal error");
+        }
     }
 
     @PostMapping(value = "admin/item/addItems")
@@ -36,6 +56,31 @@ public class ItemController {
         }
     }
 
+    @PutMapping(value = "/update/{itemId}")
+    public ResponseEntity<ItemDto> updateItem(@PathVariable String itemId, @RequestBody ItemDto itemDto){
+        try{
+            return ResponseEntity.ok(itemService.update(itemId, itemDto));
+        } catch (Exception e) {
+            if(e instanceof ItemException exception){
+                throw exception;
+            }
+            throw new ItemException(HttpStatus.INTERNAL_SERVER_ERROR, "Updating Item failed with Internal error");
+        }
+    }
+
+    @DeleteMapping(value = "/detele/{itemId}")
+    public ResponseEntity<String> deleteItem(@PathVariable String itemId) {
+        try {
+            itemService.deleteItem(itemId);
+            return ResponseEntity.ok("Item Deleted successfully");
+        } catch (Exception e) {
+            if (e instanceof ItemException ex) {
+                throw ex;
+            }
+            throw new ItemException(HttpStatus.INTERNAL_SERVER_ERROR, "Deleting the Item failed with Internal error");
+        }
+    }
+
     @ExceptionHandler(value = ItemException.class)
     public ResponseEntity<ExceptionResponseObject> exceptionHandler(ItemException ex, WebRequest request) {
         ExceptionResponseObject object = ExceptionResponseObject.builder()
@@ -43,7 +88,7 @@ public class ItemController {
                 .httpStatus(ex.getHttpStatus())
                 .httpStatusCode(ex.getHttpStatus().value())
                 .build();
-        return new ResponseEntity<ExceptionResponseObject>(object, ex.getHttpStatus());
+        return new ResponseEntity<>(object, ex.getHttpStatus());
     }
 
 }
