@@ -3,11 +3,16 @@ package cfp.wecare.service;
 import cfp.wecare.Repository.UserRepository;
 import cfp.wecare.dto.UserDto;
 import cfp.wecare.flow.ui.User.Exception.UserException;
+import cfp.wecare.flow.ui.publicAccess.Dto.LoginResponseDto;
 import cfp.wecare.flow.ui.publicAccess.Dto.UserLoginDto;
+import cfp.wecare.flow.ui.publicAccess.Exception.PublicAccessException;
 import cfp.wecare.model.Role;
 import cfp.wecare.model.User;
+import cfp.wecare.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +27,10 @@ public class UserService {
     private UserRepository userRepository;
     @Autowired
     private static final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
+    @Autowired
+    private MyUserDetailsService myUserDetailsService;
+    @Autowired
+    private JwtUtil jwtUtil;
 
     public void registerUser(UserDto userDto) {
         User user = User.builder()
@@ -73,11 +81,19 @@ public class UserService {
         }
     }
 
-    public boolean login(UserLoginDto userLoginDto) {
-        String username = userLoginDto.getUserName();
-        Optional<User> user = userRepository.findByUserName(username);
-        User dbUser = user.orElse(null);
-        return dbUser != null && passwordEncoder.matches(userLoginDto.getPassword(), dbUser.getPassword());
+    public LoginResponseDto login(UserLoginDto userLoginDto) {
+        try {
+            String username = userLoginDto.getUserName();
+            UserDetails userDetails = myUserDetailsService.loadUserByUsername(username);
+            return LoginResponseDto.builder()
+                    .login(username)
+                    .token(jwtUtil.generateToken(userDetails))
+                    .build();
+        } catch (UsernameNotFoundException exception) {
+            throw new PublicAccessException(HttpStatus.NOT_FOUND, exception.getMessage());
+        } catch (Exception e) {
+            throw new PublicAccessException(HttpStatus.INTERNAL_SERVER_ERROR, "Login failed!! Please try again");
+        }
     }
 
     public boolean isUserNotExists(UserDto userDto) {

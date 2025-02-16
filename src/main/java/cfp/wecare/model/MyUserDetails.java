@@ -8,14 +8,17 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+
 @Data
 @Builder
 public class MyUserDetails implements UserDetails {
 
     private User user;
-    public MyUserDetails(User user){
+
+    public MyUserDetails(User user) {
         this.user = user;
     }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(user.getRole()));
@@ -28,6 +31,6 @@ public class MyUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getPassword();
+        return user.getUserName();
     }
 }

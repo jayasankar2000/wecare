@@ -4,7 +4,6 @@ import cfp.wecare.dto.ItemDto;
 import cfp.wecare.flow.ui.item.exception.ItemException;
 import cfp.wecare.flow.ui.item.service.ItemService;
 import cfp.wecare.util.ExceptionResponseObject;
-import org.apache.xmlbeans.impl.xb.xsdschema.BlockSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -57,11 +56,11 @@ public class ItemController {
     }
 
     @PutMapping(value = "/update/{itemId}")
-    public ResponseEntity<ItemDto> updateItem(@PathVariable String itemId, @RequestBody ItemDto itemDto){
-        try{
+    public ResponseEntity<ItemDto> updateItem(@PathVariable String itemId, @RequestBody ItemDto itemDto) {
+        try {
             return ResponseEntity.ok(itemService.update(itemId, itemDto));
         } catch (Exception e) {
-            if(e instanceof ItemException exception){
+            if (e instanceof ItemException exception) {
                 throw exception;
             }
             throw new ItemException(HttpStatus.INTERNAL_SERVER_ERROR, "Updating Item failed with Internal error");
