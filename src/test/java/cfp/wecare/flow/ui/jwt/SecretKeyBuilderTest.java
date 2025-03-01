@@ -5,7 +5,6 @@ import jakarta.xml.bind.DatatypeConverter;
 import org.junit.jupiter.api.Test;
 
 import javax.crypto.SecretKey;
-import java.util.Arrays;
 
 public class SecretKeyBuilderTest {
 

@@ -18,7 +18,7 @@ public class OrgController {
     @Autowired
     private OrgService orgService;
 
-    @GetMapping(value = "/orgs")
+    @GetMapping(value = "/org")
     public List<OrgDto> getAllOrgs() {
         try {
             return orgService.getAllOrgs();
@@ -31,7 +31,7 @@ public class OrgController {
 
     }
 
-    @GetMapping(value = "/orgs/{orgId}")
+    @GetMapping(value = "/org/{orgId}")
     public ResponseEntity<OrgDto> getOrg(@PathVariable String orgId) {
         try {
             return ResponseEntity.ok(orgService.getOrg(orgId));
@@ -40,6 +40,17 @@ public class OrgController {
                 throw ex;
             }
             throw new OrgException(HttpStatus.INTERNAL_SERVER_ERROR, "Fetching Organization details failed with internal server error");
+        }
+    }
+
+    @GetMapping(value = "/org/{prgmId}")
+    public ResponseEntity<List<OrgDto>> getOrgsByProgram(@PathVariable String prgmId) {
+        try {
+            return ResponseEntity.ok(orgService.findOrgsByPrgm(prgmId));
+        } catch (OrgException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new OrgException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 
@@ -80,7 +91,7 @@ public class OrgController {
             return ResponseEntity.ok("Organization deleted successfully");
         } catch (Exception e) {
             if (e instanceof OrgException ex) {
-                 throw ex;
+                throw ex;
             }
             throw new OrgException(HttpStatus.INTERNAL_SERVER_ERROR, "Deleting Organization failed with Internal error");
         }
@@ -93,6 +104,6 @@ public class OrgController {
                 .message(exception.getMessage())
                 .httpStatus(exception.getHttpStatus())
                 .build();
-        return new ResponseEntity(object, exception.getHttpStatus());
+        return new ResponseEntity<>(object, exception.getHttpStatus());
     }
 }
