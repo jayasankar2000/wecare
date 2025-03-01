@@ -1,9 +1,9 @@
 package cfp.wecare.flow.ui.prgm.service;
 
 import cfp.wecare.dto.PrgmDto;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-
 public interface PrgmService {
     public List<PrgmDto> getPrgms();
 

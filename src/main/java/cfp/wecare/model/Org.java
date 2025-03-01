@@ -1,24 +1,23 @@
 package cfp.wecare.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "t_org")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@EqualsAndHashCode
 public class Org {
     @Id
     private String orgId;
     private String orgName;
     private String address;
-    @Lob
     private String description;
     private String orgAdmin;
     @ManyToOne

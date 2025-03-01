@@ -7,31 +7,16 @@ import cfp.wecare.util.ExceptionResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.WebRequest;
-
-import java.util.List;
 
 @RestController
-@RequestMapping("/api")
 public class PrgmController {
 
     @Autowired
     private PrgmService prgmService;
 
-    @GetMapping(value = "/getPrgms")
-    public ResponseEntity<List<PrgmDto>> getAllPrgms() {
-        try {
-            return ResponseEntity.ok(prgmService.getPrgms()) ;
-        } catch (Exception ex) {
-            if (ex instanceof PrgmException pe) {
-                throw pe;
-            }
-            throw new PrgmException(HttpStatus.INTERNAL_SERVER_ERROR, ex);
-        }
-    }
-
-    @GetMapping(value = "/getPrgm/{prgmId}")
+    @GetMapping(value = "super/prgm/{prgmId}")
     public ResponseEntity<PrgmDto> getProgram(@PathVariable String prgmId) {
         try {
             return ResponseEntity.ok(prgmService.getPrgm(prgmId));
@@ -43,10 +28,13 @@ public class PrgmController {
         }
     }
 
-    @PostMapping(value = "/super/create")
+    @PostMapping(value = "super/add-prgm")
     public ResponseEntity<PrgmDto> createProgram(@RequestBody PrgmDto prgmDto) {
         try {
-            return ResponseEntity.ok( prgmService.savePrgm(prgmDto));
+            if (prgmDto == null || !StringUtils.hasText(prgmDto.getPgmName()) || prgmDto.getStDate() == null || prgmDto.getEdDate() == null) {
+                throw new PrgmException(HttpStatus.BAD_REQUEST, "Program name, start date and end date is mandatory");
+            }
+            return ResponseEntity.ok(prgmService.savePrgm(prgmDto));
         } catch (Exception e) {
             if (e instanceof PrgmException ex) {
                 throw ex;
@@ -56,9 +44,12 @@ public class PrgmController {
         }
     }
 
-    @PutMapping(value = "/super/update/{prgmId}")
-    public ResponseEntity<PrgmDto> updateProgram(@PathVariable String prgmId,@RequestParam PrgmDto prgmDto) {
+    @PutMapping(value = "super/update-prgm/{prgmId}")
+    public ResponseEntity<PrgmDto> updateProgram(@PathVariable String prgmId, @RequestBody PrgmDto prgmDto) {
         try {
+            if (prgmDto == null || !StringUtils.hasText(prgmDto.getPgmName()) || prgmDto.getStDate() == null || prgmDto.getEdDate() == null) {
+                throw new PrgmException(HttpStatus.BAD_REQUEST, "Program details are mandatory!!");
+            }
             return ResponseEntity.ok(prgmService.updateProgram(prgmId, prgmDto));
         } catch (Exception e) {
             if (e instanceof PrgmException ex) {
@@ -69,8 +60,21 @@ public class PrgmController {
         }
     }
 
+    @DeleteMapping(value = "super/delete-prgm/{prgmId}")
+    public ResponseEntity<String> deleteProgram(@PathVariable String prgmId) {
+        try {
+            prgmService.deleteProgram(prgmId);
+        } catch (Exception e) {
+            if (e instanceof PrgmException ex) {
+                throw ex;
+            }
+            throw new PrgmException(HttpStatus.INTERNAL_SERVER_ERROR, "could not delete program!! please try again" + e.getMessage());
+        }
+        return ResponseEntity.ok("Program deleted");
+    }
+
     @ExceptionHandler(value = PrgmException.class)
-    public ResponseEntity<ExceptionResponseObject> exceptionHandler(PrgmException ex, WebRequest request) {
+    public ResponseEntity<ExceptionResponseObject> exceptionHandler(PrgmException ex) {
         ExceptionResponseObject object = ExceptionResponseObject.builder().
                 httpStatus(ex.getHttpStatus())
                 .message(ex.getMessage())

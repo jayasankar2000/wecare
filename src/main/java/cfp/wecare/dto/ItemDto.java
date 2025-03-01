@@ -1,11 +1,10 @@
 package cfp.wecare.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -14,4 +13,6 @@ public class ItemDto {
     private String itemName;
     private Integer itemPrice;
     private Integer quantity;
+    @JsonBackReference
+    private OrgDto orgDto;
 }

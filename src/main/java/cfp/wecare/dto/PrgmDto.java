@@ -1,18 +1,27 @@
 package cfp.wecare.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import cfp.wecare.model.Org;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.*;
 
+import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
-@Data
+import java.util.List;
+
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PrgmDto {
+public class PrgmDto implements Serializable{
     private String pgmId;
     private String pgmName;
-    private Date stDate;
-    private Date edDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    private LocalDate stDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    private LocalDate edDate;
+    @JsonManagedReference
+    private List<OrgDto> orgs;
 }
