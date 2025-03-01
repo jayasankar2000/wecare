@@ -1,6 +1,7 @@
 package cfp.wecare.config;
 
 import cfp.wecare.filter.JwtFilter;
+import cfp.wecare.model.Role;
 import cfp.wecare.service.MyUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -40,6 +41,8 @@ public class WebSecurityConfig {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
+                        .requestMatchers("/super/**").hasAuthority(Role.SUPER_ADMIN.getRole())
+                        .requestMatchers("/org-admin/**").hasAnyAuthority(Role.SUPER_ADMIN.getRole(), Role.ORG_ADMIN.getRole())
                         .requestMatchers("/public/**").permitAll()
                         .anyRequest().authenticated()
                 )

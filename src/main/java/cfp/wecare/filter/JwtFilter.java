@@ -1,5 +1,6 @@
 package cfp.wecare.filter;
 
+import cfp.wecare.model.Role;
 import cfp.wecare.util.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

@@ -18,11 +18,13 @@ import java.util.Map;
 public class JwtUtil {
     @Value("${jwt.secret}")
     private String secretKey;
-    @Value("${jwt.expiration}")
-    private long expiration;
+    @Value("${jwt.access-token-expiration}")
+    private long accessTokenExpiration;
+    @Value("${jwt.refresh-token-expiration}")
+    private long refreshTokenExpiration;
 
-    public String generateToken(UserDetails userDetails) {
-        return generateToken(userDetails.getUsername(), new HashMap<>(), expiration);
+    public String generateAccessToken(UserDetails userDetails) {
+        return generateToken(userDetails.getUsername(), new HashMap<>(), accessTokenExpiration);
     }
 
     private String generateToken(String username, Map<String, Object> claims, long expiration) {
@@ -57,4 +59,9 @@ public class JwtUtil {
         Claims claims = extractClaims(jwt);
         return claims.getExpiration().after(Date.from(Instant.now()));
     }
+
+    public String generateRefreshToken(UserDetails userDetails) {
+        return generateToken(userDetails.getUsername(), new HashMap<>(), refreshTokenExpiration);
+    }
+
 }

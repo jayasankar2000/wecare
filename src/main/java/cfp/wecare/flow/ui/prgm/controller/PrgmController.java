@@ -11,13 +11,12 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api")
 public class PrgmController {
 
     @Autowired
     private PrgmService prgmService;
 
-    @GetMapping(value = "/getPrgm/{prgmId}")
+    @GetMapping(value = "super/prgm/{prgmId}")
     public ResponseEntity<PrgmDto> getProgram(@PathVariable String prgmId) {
         try {
             return ResponseEntity.ok(prgmService.getPrgm(prgmId));
@@ -29,7 +28,7 @@ public class PrgmController {
         }
     }
 
-    @PostMapping(value = "/super/createPrgm")
+    @PostMapping(value = "super/add-prgm")
     public ResponseEntity<PrgmDto> createProgram(@RequestBody PrgmDto prgmDto) {
         try {
             if (prgmDto == null || !StringUtils.hasText(prgmDto.getPgmName()) || prgmDto.getStDate() == null || prgmDto.getEdDate() == null) {
@@ -45,7 +44,7 @@ public class PrgmController {
         }
     }
 
-    @PutMapping(value = "/super/updatePrgm/{prgmId}")
+    @PutMapping(value = "super/update-prgm/{prgmId}")
     public ResponseEntity<PrgmDto> updateProgram(@PathVariable String prgmId, @RequestBody PrgmDto prgmDto) {
         try {
             if (prgmDto == null || !StringUtils.hasText(prgmDto.getPgmName()) || prgmDto.getStDate() == null || prgmDto.getEdDate() == null) {
@@ -61,7 +60,7 @@ public class PrgmController {
         }
     }
 
-    @DeleteMapping(value = "/super/deletePrgm/{prgmId}")
+    @DeleteMapping(value = "super/delete-prgm/{prgmId}")
     public ResponseEntity<String> deleteProgram(@PathVariable String prgmId) {
         try {
             prgmService.deleteProgram(prgmId);

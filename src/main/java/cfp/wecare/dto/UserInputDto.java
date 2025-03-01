@@ -1,22 +1,19 @@
-package cfp.wecare.model;
+package cfp.wecare.dto;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
+import java.io.Serializable;
+
 @Data
-@Table(name = "t_user")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class User {
-    @Id
+public class UserInputDto implements Serializable {
     private String userId;
     private String userName;
     private String password;
     private String role;
-    private String refreshToken;
 }

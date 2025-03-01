@@ -14,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
 public class ItemController {
     @Autowired
     ItemService itemService;
@@ -43,7 +42,7 @@ public class ItemController {
         }
     }
 
-    @PostMapping(value = "admin/item/addItems")
+    @PostMapping(value = "/org-admin/item/add")
     public int saveItems(@RequestParam MultipartFile file, @RequestParam String orgId) {
         try {
             return itemService.saveItems(file, orgId);
@@ -55,7 +54,7 @@ public class ItemController {
         }
     }
 
-    @PutMapping(value = "/update/{itemId}")
+    @PutMapping(value = "/org-admin/update/{itemId}")
     public ResponseEntity<ItemDto> updateItem(@PathVariable String itemId, @RequestBody ItemDto itemDto) {
         try {
             return ResponseEntity.ok(itemService.update(itemId, itemDto));
@@ -67,7 +66,7 @@ public class ItemController {
         }
     }
 
-    @DeleteMapping(value = "/detele/{itemId}")
+    @DeleteMapping(value = "/org-admin/detele/{itemId}")
     public ResponseEntity<String> deleteItem(@PathVariable String itemId) {
         try {
             itemService.deleteItem(itemId);

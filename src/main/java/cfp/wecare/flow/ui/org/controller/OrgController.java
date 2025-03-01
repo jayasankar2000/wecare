@@ -13,13 +13,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
 public class OrgController {
 
     @Autowired
     private OrgService orgService;
 
-    @GetMapping(value = "/getOrgs")
+    @GetMapping(value = "/orgs")
     public List<OrgDto> getAllOrgs() {
         try {
             return orgService.getAllOrgs();
@@ -32,7 +31,7 @@ public class OrgController {
 
     }
 
-    @GetMapping(value = "/getOrg/{orgId}")
+    @GetMapping(value = "/orgs/{orgId}")
     public ResponseEntity<OrgDto> getOrg(@PathVariable String orgId) {
         try {
             return ResponseEntity.ok(orgService.getOrg(orgId));
@@ -44,7 +43,7 @@ public class OrgController {
         }
     }
 
-    @PostMapping(value = "/admin/org/create")
+    @PostMapping(value = "/org-admin/org/create")
     public ResponseEntity<OrgDto> createOrg(@RequestBody OrgDto orgDto) {
         try {
             if (orgDto == null || orgDto.getPrgmDto() == null || !StringUtils.hasText(orgDto.getOrgName())) {
@@ -59,7 +58,7 @@ public class OrgController {
         }
     }
 
-    @PutMapping(value = "/admin/org/update/{orgId}")
+    @PutMapping(value = "/org-admin/org/update/{orgId}")
     public ResponseEntity<OrgDto> updateOrg(@PathVariable String orgId, @RequestBody OrgDto orgDto) {
         try {
             if (orgDto == null || !StringUtils.hasText(orgDto.getOrgId()) || !StringUtils.hasText(orgDto.getOrgName())) {
@@ -74,7 +73,7 @@ public class OrgController {
         }
     }
 
-    @DeleteMapping(value = "/admin/org/delete/{orgId}")
+    @DeleteMapping(value = "/org-admin/org/delete/{orgId}")
     public ResponseEntity<String> deteleOrg(@PathVariable String orgId) {
         try {
             orgService.deleteOrg(orgId);

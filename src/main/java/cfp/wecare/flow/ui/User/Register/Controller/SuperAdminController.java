@@ -1,6 +1,7 @@
 package cfp.wecare.flow.ui.User.Register.Controller;
 
-import cfp.wecare.dto.UserDto;
+import cfp.wecare.dto.UserDetailsDto;
+import cfp.wecare.dto.UserInputDto;
 import cfp.wecare.flow.ui.User.Exception.UserException;
 import cfp.wecare.service.UserService;
 import cfp.wecare.util.ExceptionResponseObject;
@@ -11,16 +12,17 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequestMapping(value = "/api")
-public class AdminController {
+@RequestMapping(value = "/super")
+@RestController
+public class SuperAdminController {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
-    @GetMapping(value = "/admin/getUsers")
-    public ResponseEntity<List<UserDto>> getUsers() {
+    @GetMapping(value = "/users")
+    public ResponseEntity<List<UserDetailsDto>> getUsers() {
         try {
-            List<UserDto> allUsers = userService.getAllUsers();
+            List<UserDetailsDto> allUsers = userService.getAllUsers();
             return ResponseEntity.ok(allUsers);
         } catch (UserException ex) {
             throw ex;
@@ -29,8 +31,8 @@ public class AdminController {
         }
     }
 
-    @PutMapping(value = "/admin/users/editRole/{userId}")
-    public ResponseEntity<UserDto> editUserRole(@PathVariable String userId, @RequestParam String role) {
+    @PutMapping(value = "/edit-role/{userId}")
+    public ResponseEntity<UserInputDto> editUserRole(@PathVariable String userId, @RequestParam String role) {
         try {
             return ResponseEntity.ok(userService.editUserRole(userId, role));
         } catch (UserException ex) {
