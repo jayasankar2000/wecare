@@ -16,7 +16,7 @@ import java.util.List;
 @RestController
 public class ItemController {
     @Autowired
-    ItemService itemService;
+    private ItemService itemService;
 
     @GetMapping(value = "/items")
     public ResponseEntity<List<ItemDto>> getAllItems() {
@@ -42,7 +42,7 @@ public class ItemController {
         }
     }
 
-    @PostMapping(value = "/org-admin/item/add")
+    @PostMapping(value = "/org-admin/items/add")
     public int saveItems(@RequestParam MultipartFile file, @RequestParam String orgId) {
         try {
             return itemService.saveItems(file, orgId);

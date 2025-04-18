@@ -1,4 +1,10 @@
+server:
+  port: 8081
+  servlet:
+    context-path: /wecare
 spring:
+  application:
+    name: wecare-application
   datasource:
     url: jdbc:postgresql://localhost:5432/wecare
     username: postgres

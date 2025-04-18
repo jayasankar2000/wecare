@@ -111,6 +111,20 @@ public class OrgServiceImpl implements OrgService {
         }
     }
 
+    @Override
+    public List<OrgDto> findOrgsByPrgm(String prgmId) {
+        try {
+            List<Org> orgs = orgRepository.findAllByProgram(prgmId);
+            List<OrgDto> orgDtos = new ArrayList<>();
+            for (Org org : orgs) {
+                orgDtos.add(orgToDtoMapper(org, org.getProgram()));
+            }
+            return orgDtos;
+        } catch (Exception e) {
+            throw new OrgException(HttpStatus.INTERNAL_SERVER_ERROR, "Getting organizations for this program failed with internal error");
+        }
+    }
+
     private OrgDto orgToDtoMapper(Org org, Prgm prgm) {
         PrgmDto prgmDto = modelMapper.map(prgm, PrgmDto.class);
         OrgDto savedOrgDto = modelMapper.map(org, OrgDto.class);

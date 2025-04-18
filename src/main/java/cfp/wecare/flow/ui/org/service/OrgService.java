@@ -15,4 +15,6 @@ public interface OrgService {
     OrgDto update(String orgId, OrgDto orgDto);
 
     void deleteOrg(String orgId);
+
+    List<OrgDto> findOrgsByPrgm(String prgmId);
 }

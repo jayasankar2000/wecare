@@ -1,30 +1,27 @@
-package cfp.wecare.flow.ui.item.exception;
+package cfp.wecare.transaction.exception;
 
-import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
-@Getter
-public class ItemException extends RuntimeException {
-
+public class TransactionException extends RuntimeException{
     private HttpStatus httpStatus;
     private Object error;
     private String message;
 
-    public ItemException() {
+    public TransactionException() {
     }
 
-    public ItemException(HttpStatus httpStatus, String msg) {
+    public TransactionException(HttpStatus httpStatus, String msg) {
         this.message = msg;
         this.httpStatus = httpStatus;
     }
 
-    public ItemException(HttpStatus httpStatus, Exception ex) {
+    public TransactionException(HttpStatus httpStatus, Exception ex) {
         super(ex);
         this.httpStatus = httpStatus;
         this.error = ex;
     }
 
-    public ItemException(String msg, Exception ex) {
+    public TransactionException(String msg, Exception ex) {
         super(ex);
         this.message = msg;
     }

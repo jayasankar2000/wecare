@@ -98,7 +98,7 @@ public class ItemServiceImpl implements ItemService {
             if (org.isEmpty()) {
                 throw new ItemException(HttpStatus.NOT_FOUND, "The Organization is not present");
             }
-            List<Item> items = itemRepository.findByOrg(org.get());
+            List<Item> items = itemRepository.findByOrgId(org.get().getOrgId());
             return items.stream()
                     .filter(Objects::nonNull)
                     .map(this::mapperToDto)

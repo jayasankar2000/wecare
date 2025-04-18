@@ -1,6 +1,10 @@
 package cfp.wecare.dto;
 
+import cfp.wecare.transaction.model.PaymentStatus;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.*;
 
 @Getter
@@ -15,4 +19,6 @@ public class ItemDto {
     private Integer quantity;
     @JsonBackReference
     private OrgDto orgDto;
+    @Enumerated(EnumType.STRING)
+    private PaymentStatus paymentStatus;
 }
