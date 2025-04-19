@@ -5,6 +5,7 @@ import cfp.wecare.flow.ui.item.exception.ItemException;
 import cfp.wecare.model.Item;
 import cfp.wecare.transaction.dto.ItemDetailsDto;
 import cfp.wecare.transaction.dto.ItemDetailsResponseDto;
+import cfp.wecare.transaction.dto.PaymentResponseDto;
 import cfp.wecare.transaction.exception.ItemDetailsException;
 import cfp.wecare.transaction.service.FilterSelectedItemsService;
 import cfp.wecare.transaction.service.TransactionService;
@@ -43,14 +44,13 @@ public class TransactionController {
     }
 
     @PostMapping(value = "/transaction/confirm-payment")
-    public ResponseEntity<String> confirmPayment(@RequestBody List<ItemDto> items) {
+    public ResponseEntity<PaymentResponseDto> confirmPayment(@RequestBody List<ItemDto> items) {
         try {
             if (CollectionUtils.isEmpty(items)) {
                 throw new ItemDetailsException(HttpStatus.BAD_REQUEST, "The given list of items is empty");
             }
             String username = SecurityContextHolder.getContext().getAuthentication().getName();
-            transactionService.confirmPayment(items, username);
-            return null;
+            return ResponseEntity.ok(transactionService.confirmPayment(items, username));
         } catch (ItemDetailsException ex) {
             throw ex;
         } catch (Exception e) {
